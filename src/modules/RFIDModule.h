@@ -20,7 +20,6 @@ public:
     explicit RFIDModule(QObject *parent = nullptr);
     Q_PROPERTY(bool isBusy READ isBusy WRITE setIsBusy NOTIFY isBusyChanged)
 
-
     template <class RFIDComponentT>
     void inject();
 
@@ -31,7 +30,6 @@ public:
 
     Q_INVOKABLE void read();
     Q_INVOKABLE void write(const QString& data);
-
 
     bool isBusy() const;
     void setIsBusy(bool value);
