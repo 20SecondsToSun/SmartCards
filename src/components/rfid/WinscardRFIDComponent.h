@@ -32,7 +32,7 @@ public:
     virtual void start() override;
     virtual void stop() override;
     virtual void read() override;
-    virtual void write(const QString& data) override;
+    virtual void write(const QByteArray& data) override;
 
 private:
     LoadkeyAPDUCommand loadkeyAPDUCommand;
@@ -60,7 +60,6 @@ private:
 private:   
     SCARDCONTEXT cardContext;
     SCARDHANDLE cardHandle;
-    QString cardReaderName;
 
 private:
     QVector<uint8_t> blockAddresses;

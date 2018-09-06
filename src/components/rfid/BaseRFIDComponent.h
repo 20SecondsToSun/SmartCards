@@ -17,7 +17,7 @@ public:
     virtual void stop() override;
 
     virtual void read() = 0;
-    virtual void write(const QString& data) = 0;
+    virtual void write(const QByteArray& data) = 0;
 
     enum class RFIDMode
     {
@@ -47,6 +47,7 @@ public:
     void setRFIDMode(RFIDMode rfidMode);
     void setCardType(CardType cardType);
     void setEndSymbol(QChar value);
+    void setDeviceName(const QString& name);
 
 protected:
     RFIDMode _rfidMode = RFIDMode::Reading;
@@ -55,6 +56,7 @@ protected:
     QChar endSymbol;
 
     bool _connected = false;
+    QString deviceName;
 
 signals: 
     void connectedChanged();
@@ -62,6 +64,7 @@ signals:
     void cardTypeChanged(CardType cardType);
 
     void dataReaded(const QString& data);
+    void dataReaded(const QByteArray& data);
     void dataWrited();
     void errorOccured();
 };

@@ -1,4 +1,4 @@
-QT += qml quick
+QT += qml quick nfc
 
 CONFIG += c++11
 
@@ -11,7 +11,8 @@ SOURCES += \
     src/components/rfid/WinscardRFIDComponent.cpp \
     src/components/rfid/APDUCommand.cpp \
     src/modules/RFIDModule.cpp \
-    src/components/rfid/SerialRFIDComponent.cpp
+    src/components/rfid/SerialRFIDComponent.cpp \
+    src/components/rfid/RfidMessage.cpp
 
 RESOURCES += qml.qrc
 
@@ -51,4 +52,5 @@ HEADERS += \
     src/components/rfid/WinscardRFIDComponent.h \
     src/components/rfid/APDUCommand.h \
     src/modules/RFIDModule.h \
-    src/components/rfid/SerialRFIDComponent.h
+    src/components/rfid/SerialRFIDComponent.h \
+    src/components/rfid/RfidMessage.h

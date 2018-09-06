@@ -2,6 +2,7 @@
 #include "src/components/rfid/WinscardRFIDComponent.h"
 #include "src/components/rfid/BaseRFIDComponent.h"
 
+
 RFIDModule::RFIDModule(QObject *parent) : QObject(parent)
 {
 
@@ -21,7 +22,9 @@ void RFIDModule::inject()
 void RFIDModule::init()
 {
     inject<WinscardRFIDComponent>();
-    rfid->setEndSymbol('\n');
+    rfid->setDeviceName(deviceName);
+
+    message = new RfidMessage();
 
     rfidThread = new QThread();
     connect(rfidThread, SIGNAL(started()), this, SLOT(onRfidThreadStarted()));
@@ -30,7 +33,7 @@ void RFIDModule::init()
     rfid->moveToThread(rfidThread);
     rfidThread->start();
 
-    connect(rfid.data(), SIGNAL(dataReaded(const QString&)), this, SLOT(onDataReaded(const QString&)));
+    connect(rfid.data(), SIGNAL(dataReaded(const QByteArray&)), this, SLOT(onDataReaded(const QByteArray&)));
     connect(rfid.data(), SIGNAL(dataWrited()), this, SLOT(onDataWrited()));
     connect(rfid.data(), SIGNAL(winscardError(WinscardError )), this, SLOT(onWinscardError(WinscardError )));
 }
@@ -47,24 +50,22 @@ void RFIDModule::stop()
 
 void RFIDModule::read()
 {
- rfid->read();
+    rfid->read();
 }
 
 void RFIDModule::write(const QString& data)
-{
-    rfid->write(data);
+{    
+    rfid->write(message->prepareBytesForWrite(data, messageType));
 }
 
 void RFIDModule::onRfidThreadStarted()
 {
     qDebug()<<"onRfidThreadStarted ........";
-
 }
 
-void RFIDModule::onDataReaded(const QString& data)
+void RFIDModule::onDataReaded(const QByteArray& data)
 {
-    emit dataReaded(data);
-    qDebug()<<"on read success ........"<<data;
+   emit dataReaded(message->parseBytes(data, messageType));
 }
 
 void RFIDModule::onDataWrited()

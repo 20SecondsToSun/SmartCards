@@ -48,6 +48,11 @@ void BaseRFIDComponent::setEndSymbol(QChar value)
     endSymbol = value;
 }
 
+void BaseRFIDComponent::setDeviceName(const QString& value)
+{
+    deviceName = value;
+}
+
 
 
 

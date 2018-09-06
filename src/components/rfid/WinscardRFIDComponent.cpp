@@ -3,7 +3,6 @@
 
 WinscardRFIDComponent::WinscardRFIDComponent(QObject *parent) : BaseRFIDComponent(parent)
 {
-    cardReaderName = "ACS ACR122 0";
     fillBlockAddresses();
 }
 
@@ -55,12 +54,12 @@ void WinscardRFIDComponent::read()
             return;
         }
 
-//        if(data.isEmpty())
-//        {
-//            releaseCardReader();
-//            emit winscardError(WinscardError::EmptyData);
-//            return;
-//        }
+        //        if(data.isEmpty())
+        //        {
+        //            releaseCardReader();
+        //            emit winscardError(WinscardError::EmptyData);
+        //            return;
+        //        }
 
         fulldata.append(data);
     }
@@ -76,10 +75,10 @@ void WinscardRFIDComponent::read()
     }
 
     releaseCardReader();
-    emit dataReaded(QString(fulldata));
+    emit dataReaded(fulldata);
 }
 
-void WinscardRFIDComponent::write(const QString& data)
+void WinscardRFIDComponent::write(const QByteArray& data)
 {
     if(!cardPreparedSuccess())
     {
@@ -94,7 +93,7 @@ void WinscardRFIDComponent::write(const QString& data)
     }
 
     qDebug()<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    QByteArray cardData = data.toUtf8();
+    QByteArray cardData = data;
     int blocksNeeded = getBlocksNeedForWriting(cardData);
     int blockOffset = 0;
     const int MAX_BLOCK_FOR_WRITE = blockAddresses.size();
@@ -190,7 +189,7 @@ bool WinscardRFIDComponent::establishContext()
 bool WinscardRFIDComponent::cardConnect()
 {
     DWORD dwAP = 0;
-    LPCWSTR name = reinterpret_cast<LPCWSTR>(cardReaderName.unicode());
+    LPCWSTR name = reinterpret_cast<LPCWSTR>(deviceName.unicode());
     return SCardConnect(cardContext, name, SCARD_SHARE_SHARED, SCARD_PROTOCOL_Tx, &cardHandle, &dwAP) == SCARD_S_SUCCESS;
 }
 
@@ -219,7 +218,7 @@ bool WinscardRFIDComponent::checkIsDeviceConnected()
         return false;
     }
 
-    return name.contains(cardReaderName);
+    return name.contains(deviceName);
 }
 
 bool WinscardRFIDComponent::loadKey()
