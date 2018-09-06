@@ -1,6 +1,7 @@
-import QtQuick 2.0
+import QtQuick 2.2
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Controls.Styles 1.4
 
 Item
 {
@@ -18,13 +19,30 @@ Item
             color: "#008800";
         }
 
-        Button
+        Item
         {
-            id:startRead;
-            text: "Start read";
-            onClicked:
+            implicitWidth: 400;
+            implicitHeight: 20;
+        }
+
+        TextArea
+        {
+            implicitWidth: 400;
+            implicitHeight: 60;
+            id:inputText;
+            width: 310;
+            height: 200;
+            wrapMode: TextEdit.Wrap;
+            selectByMouse: true;
+            font.family: "Helvetica";
+            font.pixelSize: 14;
+            text: "some data"
+
+            background: Rectangle
             {
-                smartCard.read();
+                implicitWidth: 400
+                implicitHeight: 60
+                border.color: "#21be2b";
             }
         }
 
@@ -34,8 +52,53 @@ Item
             text: "Start write";
             onClicked:
             {
-                smartCard.write("user data user- user data 000000000000000");
+                smartCard.write(inputText.text);
             }
+        }
+
+        Item
+        {
+            implicitWidth: 400;
+            implicitHeight: 20;
+        }
+
+        TextArea
+        {
+            implicitWidth: 400;
+            implicitHeight: 60;
+            id: outputText;
+            width: 310;
+            height: 200;
+            wrapMode: TextEdit.Wrap;
+            selectByMouse: true;
+            font.family: "Helvetica";
+            font.pixelSize: 14;
+
+            background: Rectangle
+            {
+                implicitWidth: 400
+                implicitHeight: 60
+                border.color: "#21be2b";
+            }
+        }
+
+        Button
+        {
+            id:startRead;
+            text: "Start read";
+            onClicked:
+            {
+                smartCard.read();
+            }
+        }
+    }
+
+    Connections
+    {
+        target: smartCard;
+        onDataReaded:
+        {
+            outputText.text = data;
         }
     }
 }

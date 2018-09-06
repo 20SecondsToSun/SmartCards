@@ -1,9 +1,10 @@
 #include "WinscardRFIDComponent.h"
+#include <QGuiApplication>
 
 WinscardRFIDComponent::WinscardRFIDComponent(QObject *parent) : BaseRFIDComponent(parent)
 {
     cardReaderName = "ACS ACR122 0";
-    fillBlockAdresses();
+    fillBlockAddresses();
 }
 
 void WinscardRFIDComponent::start()
@@ -18,12 +19,14 @@ void WinscardRFIDComponent::stop()
 
 void WinscardRFIDComponent::read()
 {
+    //qDebug()<<QGuiApplication::instance()->thread();
+    //qDebug()<<this->thread();
     if(!cardPreparedSuccess())
     {
         return;
     }
 
-    if(SCardBeginTransaction(card_handle_) != SCARD_S_SUCCESS)
+    if(SCardBeginTransaction(cardHandle) != SCARD_S_SUCCESS)
     {
         releaseCardReader();
         emit winscardError(WinscardError::CantStartTransaction);
@@ -32,11 +35,11 @@ void WinscardRFIDComponent::read()
 
     QByteArray fulldata;
 
-    for(int i = 0; i < blockAdresses.size(); i++)
+    for(int i = 0; i < blockAddresses.size(); i++)
     {
-        uint8_t blockAdress = blockAdresses[i];
+        uint8_t blockAddress = blockAddresses[i];
 
-        if(!blockAuthenticate(blockAdress))
+        if(!blockAuthenticate(blockAddress))
         {
             releaseCardReader();
             emit winscardError(WinscardError::AuthError);
@@ -45,7 +48,7 @@ void WinscardRFIDComponent::read()
 
         QByteArray data;
 
-        if(!readBlockData(blockAdress, data))
+        if(!readBlockData(blockAddress, data))
         {
             releaseCardReader();
             emit winscardError(WinscardError::ReadError);
@@ -65,7 +68,7 @@ void WinscardRFIDComponent::read()
     qDebug()<<"fulldata "<<QString(fulldata);
     qDebug()<<"xxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
-    if(SCardEndTransaction(card_handle_, SCARD_LEAVE_CARD) != SCARD_S_SUCCESS)
+    if(SCardEndTransaction(cardHandle, SCARD_LEAVE_CARD) != SCARD_S_SUCCESS)
     {
         releaseCardReader();
         emit winscardError(WinscardError::CantEndTransaction);
@@ -83,7 +86,7 @@ void WinscardRFIDComponent::write(const QString& data)
         return;
     }
 
-    if(SCardBeginTransaction(card_handle_) != SCARD_S_SUCCESS)
+    if(SCardBeginTransaction(cardHandle) != SCARD_S_SUCCESS)
     {
         releaseCardReader();
         emit winscardError(WinscardError::CantStartTransaction);
@@ -94,7 +97,7 @@ void WinscardRFIDComponent::write(const QString& data)
     QByteArray cardData = data.toUtf8();
     int blocksNeeded = getBlocksNeedForWriting(cardData);
     int blockOffset = 0;
-    const int MAX_BLOCK_FOR_WRITE = blockAdresses.size();
+    const int MAX_BLOCK_FOR_WRITE = blockAddresses.size();
 
     if(blocksNeeded > MAX_BLOCK_FOR_WRITE)
     {
@@ -105,7 +108,7 @@ void WinscardRFIDComponent::write(const QString& data)
 
     for(int i = 0; i < blocksNeeded; i++)
     {
-        uint8_t blockAdress = blockAdresses[i];
+        uint8_t blockAdress = blockAddresses[i];
 
         if(!blockAuthenticate(blockAdress))
         {
@@ -133,7 +136,7 @@ void WinscardRFIDComponent::write(const QString& data)
         }
     }
 
-    if(SCardEndTransaction(card_handle_, SCARD_LEAVE_CARD) != SCARD_S_SUCCESS)
+    if(SCardEndTransaction(cardHandle, SCARD_LEAVE_CARD) != SCARD_S_SUCCESS)
     {
         releaseCardReader();
         emit winscardError(WinscardError::CantEndTransaction);
@@ -181,14 +184,14 @@ bool WinscardRFIDComponent::cardPreparedSuccess()
 
 bool WinscardRFIDComponent::establishContext()
 {
-    return SCardEstablishContext(SCARD_SCOPE_USER, 0, 0, &card_context_) == SCARD_S_SUCCESS;
+    return SCardEstablishContext(SCARD_SCOPE_USER, 0, 0, &cardContext) == SCARD_S_SUCCESS;
 }
 
 bool WinscardRFIDComponent::cardConnect()
 {
     DWORD dwAP = 0;
-    LPCWSTR _cardReaderName = reinterpret_cast<LPCWSTR>(cardReaderName.unicode());
-    return SCardConnect(card_context_, _cardReaderName, SCARD_SHARE_SHARED, SCARD_PROTOCOL_Tx, &card_handle_, &dwAP) == SCARD_S_SUCCESS;
+    LPCWSTR name = reinterpret_cast<LPCWSTR>(cardReaderName.unicode());
+    return SCardConnect(cardContext, name, SCARD_SHARE_SHARED, SCARD_PROTOCOL_Tx, &cardHandle, &dwAP) == SCARD_S_SUCCESS;
 }
 
 bool WinscardRFIDComponent::checkIsDeviceConnected()
@@ -196,7 +199,7 @@ bool WinscardRFIDComponent::checkIsDeviceConnected()
     LPWSTR mszReaders;
     DWORD dwReaders = SCARD_AUTOALLOCATE;
 
-    if(SCardListReadersW(card_context_, NULL, (LPWSTR)&mszReaders, &dwReaders) != SCARD_S_SUCCESS)
+    if(SCardListReadersW(cardContext, NULL, (LPWSTR)&mszReaders, &dwReaders) != SCARD_S_SUCCESS)
     {
         return false;
     }
@@ -211,7 +214,7 @@ bool WinscardRFIDComponent::checkIsDeviceConnected()
     }
     QString name(buffer);
 
-    if(SCardFreeMemory(card_context_, mszReaders)!= SCARD_S_SUCCESS)
+    if(SCardFreeMemory(cardContext, mszReaders)!= SCARD_S_SUCCESS)
     {
         return false;
     }
@@ -221,27 +224,27 @@ bool WinscardRFIDComponent::checkIsDeviceConnected()
 
 bool WinscardRFIDComponent::loadKey()
 {
-    loadkeyAPDUCommand.setCardHandle(card_handle_);
+    loadkeyAPDUCommand.setCardHandle(cardHandle);
     return loadkeyAPDUCommand.perform();
 }
 
 bool WinscardRFIDComponent::blockAuthenticate(uint8_t blockNumber)
 {
-    blockAuthAPDUCommand.setCardHandle(card_handle_);
+    blockAuthAPDUCommand.setCardHandle(cardHandle);
     blockAuthAPDUCommand.setBlockNumber(blockNumber);
     return blockAuthAPDUCommand.perform();
 }
 
 bool WinscardRFIDComponent::beepCommand(bool enabled)
 {
-    beepAPDUCommand.setCardHandle(card_handle_);
+    beepAPDUCommand.setCardHandle(cardHandle);
     beepAPDUCommand.setEnabled(enabled);
     return beepAPDUCommand.perform();
 }
 
 bool WinscardRFIDComponent::writeBlockData(uint8_t blockNumber, const QByteArray& data)
 {
-    writeAPDUCommand.setCardHandle(card_handle_);
+    writeAPDUCommand.setCardHandle(cardHandle);
     writeAPDUCommand.setBlockNumber(blockNumber);
     writeAPDUCommand.setData(data);
     return writeAPDUCommand.perform();
@@ -249,7 +252,7 @@ bool WinscardRFIDComponent::writeBlockData(uint8_t blockNumber, const QByteArray
 
 bool WinscardRFIDComponent::readBlockData(uint8_t blockNumber, QByteArray& data)
 {
-    readAPDUCommand.setCardHandle(card_handle_);
+    readAPDUCommand.setCardHandle(cardHandle);
     readAPDUCommand.setBlockNumber(blockNumber);
     bool status = readAPDUCommand.perform();
 
@@ -263,21 +266,23 @@ bool WinscardRFIDComponent::readBlockData(uint8_t blockNumber, QByteArray& data)
 
 void WinscardRFIDComponent::releaseCardReader()
 {
-    SCardDisconnect(card_handle_, SCARD_UNPOWER_CARD);
-    SCardReleaseContext(card_context_);
+    SCardDisconnect(cardHandle, SCARD_UNPOWER_CARD);
+    SCardReleaseContext(cardContext);
 }
 
-void WinscardRFIDComponent::fillBlockAdresses()
+void WinscardRFIDComponent::fillBlockAddresses()
 {
     //fill adress array with 64 blocks start adresses
     //every third block - trail block, does'n use
     //read milfare specs
 
+    //mifare classick 1K
+
     int k = 0;
     const int allBlocksNum = 64;
     const int hexBase = 16;
 
-    blockAdresses.clear();
+    blockAddresses.clear();
 
     for(int i = 0; i < allBlocksNum; i++)
     {
@@ -290,10 +295,10 @@ void WinscardRFIDComponent::fillBlockAdresses()
             QString hex = QString::number(i, hexBase);
             bool ok;
             const unsigned int parsedValue = hex.toUInt(&ok, hexBase);
-            blockAdresses.push_back(parsedValue);
+            blockAddresses.push_back(parsedValue);
         }
     }
-    blockAdresses.pop_front();//don't use 0x00 block
+    blockAddresses.pop_front();//don't use 0x00 block
 }
 
 int WinscardRFIDComponent::getBlocksNeedForWriting(const QByteArray& cardData)

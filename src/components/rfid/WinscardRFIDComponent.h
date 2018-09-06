@@ -54,16 +54,16 @@ private:
     void releaseCardReader();
 
 private:
-    void fillBlockAdresses();
+    void fillBlockAddresses();
     int getBlocksNeedForWriting(const QByteArray& cardData);
 
 private:   
-    SCARDCONTEXT card_context_;
-    SCARDHANDLE card_handle_;
+    SCARDCONTEXT cardContext;
+    SCARDHANDLE cardHandle;
     QString cardReaderName;
 
 private:
-    QVector<uint8_t> blockAdresses;
+    QVector<uint8_t> blockAddresses;
 
 signals:
     void winscardError(WinscardError error);

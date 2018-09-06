@@ -14,7 +14,7 @@ protected:
     LPCSCARD_IO_REQUEST protocol = SCARD_PCI_T1;
     uint8_t keyType = 0x60; //0x60 /*TypeA */ 0x61 /*TypeB */
     uint8_t keyLocation = 0x00;//0x01
-    SCARDHANDLE card_handle_;
+    SCARDHANDLE cardHandle;
     uint8_t* commandBytes;
 
 public:

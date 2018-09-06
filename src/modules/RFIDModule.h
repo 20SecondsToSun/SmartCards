@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QQmlContext>
 #include <QString>
+#include <QThread>
 #include <QSharedPointer>
 #include "src/components/rfid/WinscardRFIDComponent.h"
 
@@ -14,7 +15,7 @@ class RFIDModule : public QObject
     Q_OBJECT
 
 public:
-    RFIDModule();
+    explicit RFIDModule(QObject *parent = nullptr);
 
     template <class RFIDComponentT>
     void inject();
@@ -29,11 +30,17 @@ public:
 
 private:
     QSharedPointer<BaseRFIDComponent> rfid;
+    QThread* rfidThread = nullptr;
 
 private slots:
     void onDataReaded(const QString& data);
     void onDataWrited();
     void onWinscardError(WinscardError error);
+
+    void onRfidThreadStarted();
+
+signals:
+    void dataReaded(const QString& data);
 };
 
 #endif // RFIDMODULE_H

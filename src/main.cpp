@@ -12,11 +12,12 @@ int main(int argc, char *argv[])
     QScopedPointer<AppController> appController(new AppController);
     engine.rootContext()->setContextProperty("appController", appController.data());
 
-    engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
-
     appController->init();
     appController.data()->setQmlContext(engine.rootContext());
     appController->start();
+
+    engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
+
 
     if (engine.rootObjects().isEmpty())
     {

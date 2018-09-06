@@ -45,17 +45,21 @@ public:
     void setConnected(bool value);
     bool connected() const;
     void setRFIDMode(RFIDMode rfidMode);
+    void setCardType(CardType cardType);
+    void setEndSymbol(QChar value);
 
 protected:
     RFIDMode _rfidMode = RFIDMode::Reading;
     CardType _cardType = CardType::MifareClassic1K;
     CardProtocol _cardProtocol = CardProtocol::Raw;
+    QChar endSymbol;
 
     bool _connected = false;
 
 signals: 
     void connectedChanged();
     void rfidModeChanged(RFIDMode mode);
+    void cardTypeChanged(CardType cardType);
 
     void dataReaded(const QString& data);
     void dataWrited();

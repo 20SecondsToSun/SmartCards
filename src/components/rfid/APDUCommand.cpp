@@ -10,7 +10,7 @@ APDUCommand::~APDUCommand()
 
 void APDUCommand::setCardHandle(SCARDHANDLE value)
 {
-    card_handle_ = value;
+    cardHandle = value;
 }
 
 void APDUCommand::setProtocol(LPCSCARD_IO_REQUEST value)
@@ -22,7 +22,7 @@ bool APDUCommand::perform()
 {
     DWORD cbRecv = MAX_APDU_SIZE;
     BYTE pbRecv[MAX_APDU_SIZE];
-    return SCardTransmit(card_handle_,
+    return SCardTransmit(cardHandle,
                          protocol,
                          commandBytes,
                          size,
@@ -157,7 +157,7 @@ bool ReadAPDUCommand::perform()
     DWORD cbRecv = MAX_APDU_SIZE;
     BYTE pbRecv[MAX_APDU_SIZE];
 
-    bool status = SCardTransmit(card_handle_,
+    bool status = SCardTransmit(cardHandle,
                                 protocol,
                                 commandBytes,
                                 size,
