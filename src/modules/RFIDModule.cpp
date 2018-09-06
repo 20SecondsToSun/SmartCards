@@ -7,6 +7,21 @@ RFIDModule::RFIDModule(QObject *parent) : QObject(parent)
 
 }
 
+RFIDModule::~RFIDModule()
+{
+    if(rfidThread)
+    {
+        rfidThread->quit();
+        rfidThread->wait();
+        delete rfidThread;
+    }
+
+    if(message)
+    {
+        delete message;
+    }
+}
+
 void RFIDModule::setQmlContext(QQmlContext* qmlContext)
 {
     qmlContext->setContextProperty("smartCard", this);
@@ -56,7 +71,6 @@ void RFIDModule::read()
     {
         setIsBusy(true);
         emit startRead();
-        //rfid->read();
     }
 }
 

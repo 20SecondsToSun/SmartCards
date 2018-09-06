@@ -18,6 +18,8 @@ class RFIDModule : public QObject
 
 public:
     explicit RFIDModule(QObject *parent = nullptr);
+    virtual ~RFIDModule();
+
     Q_PROPERTY(bool isBusy READ isBusy WRITE setIsBusy NOTIFY isBusyChanged)
 
     template <class RFIDComponentT>
