@@ -53,6 +53,18 @@ void BaseRFIDComponent::setDeviceName(const QString& value)
     deviceName = value;
 }
 
+void BaseRFIDComponent::onStartRead()
+{
+
+}
+
+void BaseRFIDComponent::onStartWrite(const QByteArray& data)
+{
+
+}
+
+
+
 
 
 

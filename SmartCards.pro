@@ -5,7 +5,6 @@ CONFIG += c++11
 SOURCES += \
     src/main.cpp \
     src/components/BaseComponent.cpp \
-    src/main.cpp \
     src/AppController.cpp \
     src/components/rfid/BaseRFIDComponent.cpp \
     src/components/rfid/WinscardRFIDComponent.cpp \

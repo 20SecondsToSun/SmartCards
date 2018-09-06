@@ -67,6 +67,10 @@ signals:
     void dataReaded(const QByteArray& data);
     void dataWrited();
     void errorOccured();
+
+public slots:
+    virtual void onStartRead();
+    virtual void onStartWrite(const QByteArray& data);
 };
 
 typedef BaseRFIDComponent::RFIDMode RFIDMode;

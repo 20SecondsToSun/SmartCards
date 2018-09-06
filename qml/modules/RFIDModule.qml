@@ -50,6 +50,7 @@ Item
         {
             id:startWrite;
             text: "Start write";
+            enabled: !smartCard.isBusy;
             onClicked:
             {
                 smartCard.write(inputText.text);
@@ -86,6 +87,7 @@ Item
         {
             id:startRead;
             text: "Start read";
+            enabled: !smartCard.isBusy;
             onClicked:
             {
                 smartCard.read();

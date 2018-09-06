@@ -66,6 +66,10 @@ private:
 
 signals:
     void winscardError(WinscardError error);
+
+public slots:
+    virtual void onStartRead() override;
+    virtual void onStartWrite(const QByteArray& data) override;
 };
 
 typedef WinscardRFIDComponent::WinscardError WinscardError;

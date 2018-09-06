@@ -16,10 +16,13 @@ void WinscardRFIDComponent::stop()
 
 }
 
+void WinscardRFIDComponent::onStartRead()
+{
+    read();
+}
+
 void WinscardRFIDComponent::read()
 {
-    //qDebug()<<QGuiApplication::instance()->thread();
-    //qDebug()<<this->thread();
     if(!cardPreparedSuccess())
     {
         return;
@@ -76,6 +79,12 @@ void WinscardRFIDComponent::read()
 
     releaseCardReader();
     emit dataReaded(fulldata);
+}
+
+
+void WinscardRFIDComponent::onStartWrite(const QByteArray& data)
+{
+    write(data);
 }
 
 void WinscardRFIDComponent::write(const QByteArray& data)

@@ -18,6 +18,8 @@ class RFIDModule : public QObject
 
 public:
     explicit RFIDModule(QObject *parent = nullptr);
+    Q_PROPERTY(bool isBusy READ isBusy WRITE setIsBusy NOTIFY isBusyChanged)
+
 
     template <class RFIDComponentT>
     void inject();
@@ -30,14 +32,19 @@ public:
     Q_INVOKABLE void read();
     Q_INVOKABLE void write(const QString& data);
 
+
+    bool isBusy() const;
+    void setIsBusy(bool value);
+
 private:
-    RfidMessageType messageType = RfidMessageType::NDEFUri;
+    RfidMessageType messageType = RfidMessageType::RawData;
     QString deviceName = "ACS ACR122 0";
 
 private:
     QSharedPointer<BaseRFIDComponent> rfid;
     QThread* rfidThread = nullptr;
     RfidMessage* message;
+    bool _isBusy = false;
 
     void ndefMessageRead(const QNdefMessage &message);
 
@@ -50,6 +57,10 @@ private slots:
 
 signals:
     void dataReaded(const QString& data);
+    void startRead();
+    void startWrite(const QByteArray&);
+    void isBusyChanged();
+
 };
 
 #endif // RFIDMODULE_H
