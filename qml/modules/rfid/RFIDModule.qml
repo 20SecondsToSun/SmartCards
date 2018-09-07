@@ -13,7 +13,7 @@ Item
 
         Text
         {
-            text: "RFID component";
+            text: "RFID module";
             font.family: "Helvetica";
             font.pixelSize: 17;
             color: "#008800";

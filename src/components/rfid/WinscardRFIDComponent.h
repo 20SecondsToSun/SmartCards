@@ -65,7 +65,7 @@ private:
     QVector<uint8_t> blockAddresses;
 
 signals:
-    void winscardError(WinscardError error);
+    void winscardError(WinscardRFIDComponent::WinscardError error);
 
 public slots:
     virtual void onStartRead() override;

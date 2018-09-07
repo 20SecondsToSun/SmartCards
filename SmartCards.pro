@@ -5,13 +5,14 @@ CONFIG += c++11
 SOURCES += \
     src/main.cpp \
     src/components/BaseComponent.cpp \
-    src/AppController.cpp \
     src/components/rfid/BaseRFIDComponent.cpp \
     src/components/rfid/WinscardRFIDComponent.cpp \
     src/components/rfid/APDUCommand.cpp \
-    src/modules/RFIDModule.cpp \
     src/components/rfid/SerialRFIDComponent.cpp \
-    src/components/rfid/RfidMessage.cpp
+    src/components/rfid/RfidMessage.cpp \
+    src/modules/rfid/RFIDModule.cpp \
+    src/modules/BaseModule.cpp \
+    src/AppController.cpp
 
 RESOURCES += qml.qrc
 
@@ -50,6 +51,8 @@ HEADERS += \
     src/components/rfid/BaseRFIDComponent.h \
     src/components/rfid/WinscardRFIDComponent.h \
     src/components/rfid/APDUCommand.h \
-    src/modules/RFIDModule.h \
     src/components/rfid/SerialRFIDComponent.h \
-    src/components/rfid/RfidMessage.h
+    src/components/rfid/RfidMessage.h \
+    src/components/BaseComponent.h \
+    src/modules/rfid/RFIDModule.h \
+    src/modules/BaseModule.h

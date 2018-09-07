@@ -1,5 +1,6 @@
 #include "AppController.h"
-#include "modules/RFIDModule.h"
+#include "modules/rfid/RFIDModule.h"
+#include "modules/BaseModule.h"
 
 AppController::AppController(QObject *parent) : QObject(parent)
 {
@@ -16,15 +17,26 @@ void AppController::setQmlContext(QQmlContext* qmlContext)
 void AppController::init()
 {
     rfidModule.reset(new RFIDModule());
-    rfidModule->init();
+    modules.push_back(rfidModule);
+
+    for(auto module : modules)
+    {
+        module->init();
+    }
 }
 
 void AppController::start()
 {
-    rfidModule->start();
+    for(auto module : modules)
+    {
+        module->start();
+    }
 }
 
 void AppController::stop()
 {
-    rfidModule->stop();
+    for(auto module : modules)
+    {
+        module->stop();
+    }
 }

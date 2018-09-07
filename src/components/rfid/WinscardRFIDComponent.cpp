@@ -174,7 +174,8 @@ bool WinscardRFIDComponent::cardPreparedSuccess()
     else if(!cardConnect())
     {
         cardPrepared = false;
-        emit winscardError(WinscardError::NoCard);
+        qDebug()<<"no card";
+        emit winscardError(WinscardRFIDComponent::WinscardError::NoCard);
     }
     else if(!loadKey())
     {

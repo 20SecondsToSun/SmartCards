@@ -10,9 +10,11 @@
 #include "src/components/rfid/WinscardRFIDComponent.h"
 #include "src/components/rfid/RfidMessage.h"
 
+#include "src/modules/BaseModule.h"
+
 class BaseRFIDComponent;
 
-class RFIDModule : public QObject
+class RFIDModule : public BaseModule
 {
     Q_OBJECT
 
@@ -51,7 +53,7 @@ private:
 private slots:
     void onDataReaded(const QByteArray& data);
     void onDataWrited();
-    void onWinscardError(WinscardError error);
+    void onWinscardError(WinscardRFIDComponent::WinscardError error);
 
     void onRfidThreadStarted();
 

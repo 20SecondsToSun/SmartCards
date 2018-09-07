@@ -6,7 +6,7 @@
 #include <QSharedPointer>
 
 class RFIDModule;
-
+class BaseModule;
 class AppController : public QObject
 {
     Q_OBJECT
@@ -19,7 +19,9 @@ public:
 
     void setQmlContext(QQmlContext* qmlContext);
 
+private:
     QSharedPointer<RFIDModule> rfidModule;
+    QList<QSharedPointer<BaseModule>> modules;
 
 };
 

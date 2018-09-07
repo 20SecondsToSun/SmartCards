@@ -2,7 +2,7 @@
 #include "src/components/rfid/WinscardRFIDComponent.h"
 #include "src/components/rfid/BaseRFIDComponent.h"
 
-RFIDModule::RFIDModule(QObject *parent) : QObject(parent)
+RFIDModule::RFIDModule(QObject *parent) : BaseModule(parent)
 {
 
 }
@@ -46,7 +46,9 @@ void RFIDModule::init()
 
     connect(rfid.data(), SIGNAL(dataReaded(const QByteArray&)), this, SLOT(onDataReaded(const QByteArray&)));
     connect(rfid.data(), SIGNAL(dataWrited()), this, SLOT(onDataWrited()));
-    connect(rfid.data(), SIGNAL(winscardError(WinscardError )), this, SLOT(onWinscardError(WinscardError )));
+
+   // QSharedPointer<WinscardRFIDComponent> rfidW = qobject_cast<QSharedPointer<WinscardRFIDComponent>>(rfid );
+  //  connect(rfidW.data(), SIGNAL(winscardError(WinscardRFIDComponent::WinscardError )), this, SLOT(onWinscardError(WinscardRFIDComponent::WinscardError )));
 
     rfid->moveToThread(rfidThread);
     rfidThread->start();
@@ -111,7 +113,7 @@ void RFIDModule::onDataWrited()
     qDebug()<<"on write success ........";
 }
 
-void RFIDModule::onWinscardError(WinscardError error)
+void RFIDModule::onWinscardError(WinscardRFIDComponent::WinscardError error)
 {
     setIsBusy(false);
     qDebug()<<"error ........"<<(int)error;
