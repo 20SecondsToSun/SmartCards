@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include "AppController.h"
+#include "core/AppController.h"
 
 int main(int argc, char *argv[])
 {
@@ -16,8 +16,7 @@ int main(int argc, char *argv[])
     appController.data()->setQmlContext(engine.rootContext());
     appController->start();
 
-    engine.load(QUrl(QLatin1String("qrc:/qml/main.qml")));
-
+    engine.load(appController->getStartQML());
 
     if (engine.rootObjects().isEmpty())
     {

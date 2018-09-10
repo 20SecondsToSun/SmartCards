@@ -4,7 +4,7 @@
 
 RFIDModule::RFIDModule(QObject *parent) : BaseModule(parent)
 {
-
+        name = "smartCard";
 }
 
 RFIDModule::~RFIDModule()
@@ -20,11 +20,6 @@ RFIDModule::~RFIDModule()
     {
         delete message;
     }
-}
-
-void RFIDModule::setQmlContext(QQmlContext* qmlContext)
-{
-    qmlContext->setContextProperty("smartCard", this);
 }
 
 template <class RFIDComponentT>

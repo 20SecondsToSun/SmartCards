@@ -12,9 +12,25 @@ SOURCES += \
     src/components/rfid/RfidMessage.cpp \
     src/modules/rfid/RFIDModule.cpp \
     src/modules/BaseModule.cpp \
-    src/AppController.cpp
+    src/components/logging/LoggerComponent.cpp \
+    src/components/monitoring/MemoryChecker.cpp \
+    src/components/monitoring/MonitoringComponent.cpp \
+    src/components/slack/SlackComponent.cpp \
+    src/components/BaseComponent.cpp \
+    src/core/AppController.cpp \
+    src/modules/rfid/RFIDModule.cpp \
+    src/modules/BaseModule.cpp \
+    src/network/http/HTTPClient.cpp \
+    src/network/socketClient/TCPSocketClient.cpp \
+    src/screens/BaseScreen.cpp \
+    src/screens/GameScreen.cpp \
+    src/tools/AppSettings.cpp \
+    src/tools/FileReader.cpp \
+    src/tools/MathTools.cpp \
+    src/tools/StringTools.cpp
 
-RESOURCES += qml.qrc
+RESOURCES += qml.qrc \
+    qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -47,7 +63,6 @@ DISTFILES +=
 
 HEADERS += \
     src/components/BaseComponent.h \
-    src/AppController.h \
     src/components/rfid/BaseRFIDComponent.h \
     src/components/rfid/WinscardRFIDComponent.h \
     src/components/rfid/APDUCommand.h \
@@ -55,4 +70,23 @@ HEADERS += \
     src/components/rfid/RfidMessage.h \
     src/components/BaseComponent.h \
     src/modules/rfid/RFIDModule.h \
-    src/modules/BaseModule.h
+    src/modules/BaseModule.h \
+    src/components/logging/LoggerComponent.h \
+    src/components/monitoring/MemoryChecker.h \
+    src/components/monitoring/MonitoringComponent.h \
+    src/components/slack/SlackComponent.h \
+    src/components/BaseComponent.h \
+    src/core/AppController.h \
+    src/modules/rfid/RFIDModule.h \
+    src/modules/BaseModule.h \
+    src/network/http/HTTPClient.h \
+    src/network/socketClient/TCPSocketClient.h \
+    src/screens/BaseScreen.h \
+    src/screens/Gamescreen.h \
+    src/tools/AppSettings.h \
+    src/tools/FileReader.h \
+    src/tools/MathTools.h \
+    src/tools/StringTools.h
+
+SUBDIRS += \
+    SmartCards.pro

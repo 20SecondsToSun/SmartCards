@@ -10,6 +10,11 @@ BaseRFIDComponent::~BaseRFIDComponent()
 
 }
 
+void BaseRFIDComponent::init()
+{
+
+}
+
 void BaseRFIDComponent::start()
 {
 

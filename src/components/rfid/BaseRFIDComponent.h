@@ -13,6 +13,7 @@ public:
     explicit BaseRFIDComponent(QObject *parent = nullptr);
     virtual ~BaseRFIDComponent();
 
+    virtual void init() override;
     virtual void start() override;
     virtual void stop() override;
 

@@ -14,6 +14,7 @@ public:
     virtual void init() = 0;
     virtual void start() = 0;
     virtual void stop() = 0;
+
     virtual void setQmlContext(QQmlContext* qmlContext);
     virtual QString getName() const;
 

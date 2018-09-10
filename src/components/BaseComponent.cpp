@@ -13,6 +13,7 @@ BaseComponent::~BaseComponent()
 void BaseComponent::setQmlContext(QQmlContext* value)
 {
     qmlContext = value;
+    qmlContext->setContextProperty(name, this);
 }
 
 QString BaseComponent::getName() const

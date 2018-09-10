@@ -27,10 +27,9 @@ public:
     template <class RFIDComponentT>
     void inject();
 
-    void init();
-    void start();
-    void stop();
-    void setQmlContext(QQmlContext* qmlContext);
+    virtual void init() override;
+    virtual void start() override;
+    virtual void stop() override;
 
     Q_INVOKABLE void read();
     Q_INVOKABLE void write(const QString& data);
